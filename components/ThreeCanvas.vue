@@ -3,52 +3,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
+const canvas = ref<HTMLCanvasElement | null>(null)
 let scene: THREE.Scene,
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer,
-  cube: THREE.Mesh
-const canvas = ref<HTMLCanvasElement | null>(null)
+  sphere: THREE.Mesh,
+  sphereTexture: THREE.Texture,
+  controls: OrbitControls
 
 function init() {
-  // create scene
+  // Create scene & camera
   scene = new THREE.Scene()
-
-  // create camera
   camera = new THREE.PerspectiveCamera(
-    75,
+    90,
     window.innerWidth / window.innerHeight,
     0.1,
     1000,
   )
   camera.position.z = 5
 
-  // create renderer
+  // Create render
   renderer = new THREE.WebGLRenderer({ canvas: canvas.value!, antialias: true })
   renderer.setSize(window.innerWidth, window.innerHeight)
 
-  // create cube
-  const geometry = new THREE.BoxGeometry()
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-  cube = new THREE.Mesh(geometry, material)
-  scene.add(cube)
+  // Create sphere
+  sphereTexture = new THREE.TextureLoader().load(
+    '/skybox/digital_painting_work_from_home_office_software_e(2).jpg',
+  )
+  const geometry = new THREE.SphereGeometry(50, 32, 32)
+  const material = new THREE.MeshBasicMaterial({
+    map: sphereTexture,
+    side: THREE.BackSide,
+  })
+  sphere = new THREE.Mesh(geometry, material)
+  scene.add(sphere)
+
+  // Create controls
+  controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.enablePan = false
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 1
+  controls.dampingFactor = 0.05
+  controls.rotateSpeed = 0.3
+  controls.minDistance = 10
+  controls.maxDistance = 50
 }
 
 function animate() {
   requestAnimationFrame(animate)
-
-  // animate cube
-  cube.rotation.x += 0.01
-  cube.rotation.y += 0.01
-
-  // render scene
+  controls.update()
   renderer.render(scene, camera)
 }
 
 function handleResize() {
-  // update camera aspect ratio and renderer size on window resize
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -62,6 +73,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   renderer.dispose()
+  controls.dispose()
   window.removeEventListener('resize', handleResize)
 })
 </script>
