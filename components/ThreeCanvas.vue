@@ -3,7 +3,7 @@
     <canvas ref="canvas"></canvas>
     <div
       v-if="enableTextureControls"
-      class="absolute bg-blue-50 bottom-0 drop-shadow-lg flex items-center mb-8 p-4right-0 rounded-l-lg"
+      class="absolute bg-blue-50 bottom-0 drop-shadow-lg flex items-center mb-8 p-4 right-0 rounded-l-lg"
     >
       <p class="font-bold mr-3 text-gray-700">Change Skybox</p>
       <ThreeCanvasControl
