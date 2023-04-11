@@ -3,6 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 interface useThreeOptions {
   canvas: HTMLCanvasElement | null
+  rendererOptions?: {
+    width: number
+    height: number
+    antialias: boolean
+  }
   cameraOptions?: { fov: number; aspect: number; near: number; far: number }
   texture: string
 }
@@ -16,16 +21,26 @@ export const useThree = () => {
     controls: OrbitControls,
     material: THREE.MeshBasicMaterial
 
+  const rendererHeight = ref(500)
+
   function init({
     canvas,
+    rendererOptions = {
+      width: 500,
+      height: 500,
+      antialias: false,
+    },
     texture,
     cameraOptions = {
-      fov: 90,
-      aspect: window.innerWidth / window.innerHeight,
+      fov: 70,
+      aspect: 500 / 500,
       near: 0.1,
       far: 1000,
     },
   }: useThreeOptions) {
+    // Pass renderer sizes
+    rendererHeight.value = rendererOptions.height
+
     // Create scene & camera
     scene = new THREE.Scene()
     camera = new THREE.PerspectiveCamera(
@@ -39,9 +54,9 @@ export const useThree = () => {
     // Create render
     renderer = new THREE.WebGLRenderer({
       canvas: canvas!,
-      antialias: true,
+      antialias: rendererOptions.antialias,
     })
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(rendererOptions.width, rendererOptions.height)
 
     // Create sphere
     sphereTexture = new THREE.TextureLoader().load(texture)

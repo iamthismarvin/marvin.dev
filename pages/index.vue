@@ -1,8 +1,6 @@
-import { ThreeRenderer } from '~/.nuxt/components';
-
 <template>
   <div>
-    <div class="flex items-center m-4 absolute">
+    <div class="flex items-center m-4 absolute z-10">
       <img
         src="@/assets/images/logo.svg"
         alt="Marvin Parada"
@@ -10,7 +8,7 @@ import { ThreeRenderer } from '~/.nuxt/components';
       />
     </div>
     <ClientOnly>
-      <ThreeCanvas />
+      <ThreeCanvas enable-texture-controls />
     </ClientOnly>
   </div>
 </template>
