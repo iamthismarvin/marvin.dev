@@ -6,7 +6,7 @@
 const route = useRoute()
 const title = ref(`Marvin Parada | ${route.meta.title ?? 'Software Engineer'}`)
 const description = ref(
-  "I'm Marvin. I build software. Make a positive social impact and shape a brighter future through technology. Want to work together? Let's talk!",
+  "I'm Marvin. I build software. 🚀 Make a positive social impact and shape a brighter future through technology. Want to work together? Let's talk!",
 )
 const image = ref('https://marvin-dev-test.netlify.app/open_graph.png')
 
